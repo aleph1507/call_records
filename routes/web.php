@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [RecordController::class, 'index'])->name('record.index');
+Route::post('/', [RecordController::class, 'store'])->name('record.store');
+Route::delete('/{record}', [RecordController::class, 'destroy'])->name('record.delete');
+Route::delete('/', [RecordController::class, 'destroy'])->name('record.delete-all');
+
