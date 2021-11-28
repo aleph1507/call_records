@@ -14,6 +14,8 @@
         @stack('styles')
     </head>
     <body>
+        @include('partials/_nav')
+
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-block my-20">
                 <button type="button" class="close" data-dismiss="alert">×</button>

@@ -38012,22 +38012,40 @@ body {
   font-family: 'Nunito', sans-serif;
 }
 
-#index-table {
+.records-table {
   border-collapse: collapse;
 }
 
-#index-table td, #index-table th {
+.records-table td, .records-table th {
   border: 1px solid #999;
   padding: 0.5rem;
   text-align: left;
 }
 
-#index-table .center {
+.records-table .center {
   text-align: center;
 }
 
-#index-table i {
+.records-table i {
   border: 0;
+}
+
+.active-nav-link {
+  border-bottom-width: 4px;
+  --tw-border-opacity: 1;
+  border-color: rgba(16, 185, 129, var(--tw-border-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(16, 185, 129, var(--tw-text-opacity));
+}
+
+.inactive-nav-link {
+  --tw-text-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-text-opacity));
+}
+
+.inactive-nav-link:hover{
+  --tw-text-opacity: 1;
+  color: rgba(16, 185, 129, var(--tw-text-opacity));
 }
 
 .btn.standard {

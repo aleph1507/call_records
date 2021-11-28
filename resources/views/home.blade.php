@@ -15,7 +15,7 @@
             </div>
         </form>
 
-        @if($records && $records->isNotEmpty())
+        @if($records)
             <form action="{{route('record.delete-all')}}" class="form confirmable self-end" method="POST">
                 @method('DELETE')
                 @csrf
@@ -65,7 +65,7 @@
             </form>
         @endif
 
-        <table id="index-table" class="mt-5">
+        <table id="index-table" class="records-table mt-5">
             <thead>
             <tr>
                 <th>User</th>
@@ -90,7 +90,7 @@
                         <td>{{$record->type_of_call}}</td>
                         <td>{{$record->external_call_score}}</td>
                         <td class="center">
-                            <a href="#">
+                            <a href="{{route('record.view', ['record' => $record->id])}}">
                                 <i class="fa fa-edit"></i>
                             </a>
                         </td>

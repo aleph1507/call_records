@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Session;
 
 class RecordController extends Controller
 {
+    private $rules = [
+        'calls_csv' => 'sometimes|file|mimes:csv',
+        'user' => 'required_without:calls_csv|string',
+        'client' => 'required_without:calls_csv|string',
+        'client_type' => 'required_without:calls_csv|string',
+        'date' => 'required_without:calls_csv|date',
+        'duration' => 'required_without:calls_csv|integer',
+        'type_of_call' => 'required_without:calls_csv|in:Incoming,Outgoing',
+        'external_call_score' => 'required_without:calls_csv|integer',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +27,7 @@ class RecordController extends Controller
      */
     public function index(Request $request)
     {
-        $records = Record::query();
+        $records = Record::valid();
         $filters = [];
 
         if ($filter_user = $request->user) {
@@ -52,7 +63,7 @@ class RecordController extends Controller
      */
     public function create()
     {
-        //
+        return response()->view('records/single');
     }
 
     /**
@@ -63,19 +74,23 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'calls_csv' => 'required|file|mimes:csv'
-        ]);
-        $data = array_map('str_getcsv', file($request->file('calls_csv')));
-        DB::transaction(function () use ($data) {
-            for($i = 1; $i < count($data); $i++) {
-                Record::create(array_combine(Record::getFillable, $data[$i]));
-            }
-        });
+        $request->validate($this->rules);
+
+        if ($request->calls_csv) {
+            $data = array_map('str_getcsv', file($request->file('calls_csv')));
+            DB::transaction(function () use ($data) {
+                for($i = 1; $i < count($data); $i++) {
+                    Record::create(array_combine(Record::getFillable, $data[$i]));
+                }
+            });
+        } else {
+            Record::create($request->all());
+        }
+
 
         Session::flash('success', 'Caller data saved.');
 
-        return redirect()->route('record.store');
+        return redirect()->route('record.index');
     }
 
     /**
@@ -86,7 +101,12 @@ class RecordController extends Controller
      */
     public function show(Record $record)
     {
-        //
+        return response()->view('records/single', [
+            'record' => $record,
+            'user' => $record->user,
+            'user_score' => Record::valid()->user($record->user)->avg('external_call_score'),
+            'last5' => Record::valid()->user($record->user)->orderBy('date', 'desc')->take(5)->get()
+        ]);
     }
 
     /**
@@ -105,11 +125,15 @@ class RecordController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Record  $record
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Record $record)
     {
-        //
+        $request->validate($this->rules);
+        $record->update($request->all());
+        Session::flash('success', 'Record updated.');
+
+        return redirect()->route('record.index');
     }
 
     /**

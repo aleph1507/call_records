@@ -11,22 +11,30 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
-#index-table {
+.records-table {
     border-collapse: collapse;
 }
 
-#index-table td, #index-table th {
+.records-table td, .records-table th {
     border: 1px solid #999;
     padding: 0.5rem;
     text-align: left;
 }
 
-#index-table .center {
+.records-table .center {
     text-align: center;
 }
 
-#index-table i {
+.records-table i {
     border: 0;
+}
+
+.active-nav-link {
+    @apply border-b-4 text-green-500 border-green-500;
+}
+
+.inactive-nav-link {
+    @apply text-gray-500 hover:text-green-500;
 }
 
 .btn.standard {

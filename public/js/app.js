@@ -2187,6 +2187,11 @@ var _require = __webpack_require__(/*! ./ConfirmationModal */ "./resources/js/Co
     ConfirmationModal = _require.ConfirmationModal;
 
 window.addEventListener('DOMContentLoaded', function (e) {
+  var btnMobileMenu = document.querySelector("button.mobile-menu-button");
+  var mobileMenu = document.querySelector(".mobile-menu");
+  btnMobileMenu.addEventListener('click', function () {
+    return mobileMenu.classList.toggle('hidden');
+  });
   var formConfirmables = document.querySelectorAll('.form.confirmable');
 
   var _loop = function _loop(i) {

@@ -13,6 +13,10 @@ class Record extends Model
 
     protected $fillable = Record::getFillable;
 
+    public function scopeValid($query) {
+        return $query->where('duration', '>', 10);
+    }
+
     public function scopeUser($query, $user) {
         return $query->where('user', $user);
     }
